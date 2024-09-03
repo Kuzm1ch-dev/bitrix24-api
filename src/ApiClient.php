@@ -13,6 +13,7 @@ use Bitrix24Api\EntitiesServices\Bizproc\Event;
 use Bitrix24Api\EntitiesServices\Bizproc\Robot;
 use Bitrix24Api\EntitiesServices\CRM\Activity;
 use Bitrix24Api\EntitiesServices\CRM\ActivityCommunication;
+use Bitrix24Api\EntitiesServices\CRM\ActivityConfigurable;
 use Bitrix24Api\EntitiesServices\CRM\ActivityType;
 use Bitrix24Api\EntitiesServices\CRM\Catalog;
 use Bitrix24Api\EntitiesServices\CRM\Category;
@@ -25,6 +26,7 @@ use Bitrix24Api\EntitiesServices\CRM\Currency;
 use Bitrix24Api\EntitiesServices\CRM\Deal;
 use Bitrix24Api\EntitiesServices\CRM\DealContactItems;
 use Bitrix24Api\EntitiesServices\CRM\DealUserField;
+use Bitrix24Api\EntitiesServices\CRM\Invoice;
 use Bitrix24Api\EntitiesServices\CRM\ItemProductRow;
 use Bitrix24Api\EntitiesServices\CRM\Lead;
 use Bitrix24Api\EntitiesServices\CRM\LeadContactItems;
@@ -38,6 +40,12 @@ use Bitrix24Api\EntitiesServices\CRM\Quote;
 use Bitrix24Api\EntitiesServices\CRM\QuoteUserField;
 use Bitrix24Api\EntitiesServices\CRM\Smart\Item as crmSmartItem;
 use Bitrix24Api\EntitiesServices\CRM\Smart\Type as crmSmartType;
+use Bitrix24Api\EntitiesServices\CRM\Status;
+use Bitrix24Api\EntitiesServices\CRM\TimelineBindings;
+use Bitrix24Api\EntitiesServices\CRM\TimelineComment;
+use Bitrix24Api\EntitiesServices\CRM\TimelineIcon;
+use Bitrix24Api\EntitiesServices\CRM\TimelineLogo;
+use Bitrix24Api\EntitiesServices\Department;
 use Bitrix24Api\EntitiesServices\Disk\AttachedObject;
 use Bitrix24Api\EntitiesServices\Disk\File;
 use Bitrix24Api\EntitiesServices\Disk\Folder;
@@ -170,11 +178,15 @@ class ApiClient
         $response = null;
 
         if (!is_null($this->config->getLogger())) {
+            $loggedParams = $params;
+            if (array_key_exists('fileContent', $loggedParams)) {
+                $loggedParams['fileContent'] = substr($loggedParams['fileContent'], 0, 100) . '...';
+            }
             $this->config->getLogger()->info(
                 sprintf('request.start %s', $method),
                 [
                     'apiMethod' => $method,
-                    'params' => $params,
+                    'params' => $loggedParams,
                 ]
             );
         }
@@ -462,6 +474,11 @@ class ApiClient
         return new Activity($this, $params);
     }
 
+    public function crmActivityConfigurable(array $params = []): ActivityConfigurable
+    {
+        return new ActivityConfigurable($this, $params);
+    }
+
     public function crmActivityCommunication(array $params = []): ActivityCommunication
     {
         return new ActivityCommunication($this, $params);
@@ -513,6 +530,11 @@ class ApiClient
     public function crmDeal(array $params = []): Deal
     {
         return new Deal($this, $params);
+    }
+
+    public function crmInvoice(array $params = []): Invoice
+    {
+        return new Invoice($this, $params);
     }
 
     public function crmDealContactItems(array $params = []): DealContactItems
@@ -578,6 +600,31 @@ class ApiClient
     public function crmCurrency(array $params = []): Currency
     {
         return new Currency($this, $params);
+    }
+
+    public function crmStatus(array $params = []): Status
+    {
+        return new Status($this, $params);
+    }
+
+    public function crmTimelineComment(array $params = []): TimelineComment
+    {
+        return new TimelineComment($this, $params);
+    }
+
+    public function crmTimelineIcon(array $params = []): TimelineIcon
+    {
+        return new TimelineIcon($this, $params);
+    }
+
+    public function crmTimelineLogo(array $params = []): TimelineLogo
+    {
+        return new TimelineLogo($this, $params);
+    }
+
+    public function crmTimelineBindings(array $params = []): TimelineBindings
+    {
+        return new TimelineBindings($this, $params);
     }
 
     /*
@@ -800,5 +847,10 @@ class ApiClient
     public function userFieldType(): UserFieldType
     {
         return new UserFieldType($this);
+    }
+
+    public function department(): Department
+    {
+        return new Department($this);
     }
 }

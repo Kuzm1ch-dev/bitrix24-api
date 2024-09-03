@@ -6,8 +6,8 @@
     }
   ],
   "require": {
-    "kuzm1ch-dev/bitrix24-api": "*",
+    "x3group-dev/bitrix24-api": "*",
     "monolog/monolog": "^2.5",
-    "yandex-cloud/ydb-php-sdk": "^1.3"
+    "yandex-cloud/ydb-php-sdk": "^1.3",
   }
 }

@@ -3,7 +3,7 @@
 Установка
 
 ``
-composer require kuzm1ch-dev/bitrix24-api
+composer require x3group-dev/bitrix24-api
 ``
 
 Пример вызова

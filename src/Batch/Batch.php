@@ -28,28 +28,6 @@ class Batch
         $this->commands->attach(new Command($method, $params, $commandName));
     }
 
-    public function addStartListComman(string $method, array $params = [])
-    {
-        $params['start'] = $params['start'] ?? 0;
-        $firstResult = $this->api->request($method, $params);
-        $total = $firstResult->getResponseData()->getPagination()->getTotal();
-        for ($i = 0; $i <= $total; $i += 50) {
-            $params['start'] = $i;
-            $this->addCommand($method, $params, 'get_' . $i);
-        }
-        return $this->getTraversable();
-    }
-    public function addNavListComman(string $method, array $params = [])
-    {
-        $firstResult = $this->api->request($method, $params);
-        $total = $firstResult->getResponseData()->getPagination()->getTotal();
-        for ($i = 1; $i <= ceil($total / 50); $i++) {
-            $params['params']['NAV_PARAMS']['iNumPage'] = $i;
-            $this->addCommand($method, $params, 'get_' . $i);
-        }
-        return $this->getTraversable();
-    }
-
     /**
      * @return void
      * @todo: простой вызов

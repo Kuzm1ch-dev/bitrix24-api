@@ -104,12 +104,6 @@ class B24Api
         ];
     }
 
-    public function total(string $apiMethod, array $parameters = []): int
-    {
-        $response = $this->getApi()->request($apiMethod, $parameters)->getResponseData();
-        return $response->getPagination()->getTotal();
-    }
-
     /**
      * Сохранение/обновление авторизационных данных
      * @param $settings
