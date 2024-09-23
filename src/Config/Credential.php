@@ -35,7 +35,7 @@ class Credential
         $this->userId = $userId;
         $this->refreshToken = $refreshToken;
         $this->status = $status;
-        $this->$application_token = $application_token;
+        $this->application_token = $application_token;
     }
 
     /**
