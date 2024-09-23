@@ -15,6 +15,7 @@ class Credential
     protected string $memberId;
     protected int $userId;
     protected string $status;
+    protected string $application_token;
 
     /**
      * Credential constructor.
@@ -23,7 +24,7 @@ class Credential
      * @param string $refreshToken
      * @param int $expires
      */
-    public function __construct(string $accessToken, int $expires, string $domain, string $serverEndpoint, string $clientEndpoint, string $memberId, int $userId, string $refreshToken, string $status)
+    public function __construct(string $accessToken, int $expires, string $domain, string $serverEndpoint, string $clientEndpoint, string $memberId, int $userId, string $refreshToken, string $status, string $application_token)
     {
         $this->accessToken = $accessToken;
         $this->expires = $expires;
@@ -34,6 +35,7 @@ class Credential
         $this->userId = $userId;
         $this->refreshToken = $refreshToken;
         $this->status = $status;
+        $this->$application_token = $application_token;
     }
 
     /**
@@ -44,15 +46,17 @@ class Credential
     public static function initFromArray(array $request): self
     {
         return new self(
-            (string)$request['access_token'],
-            (int)$request['expires'],
-            (string)$request['domain'],
-            isset($request['server_endpoint']) ? (string)$request['server_endpoint'] : '',
-            (string)$request['client_endpoint'],
-            (string)$request['member_id'],
-            isset($request['user_id']) ? (int)$request['user_id'] : 0,
-            (string)$request['refresh_token'],
-            (string)$request['status']
+            (string) $request['access_token'],
+            (int) $request['expires'],
+            (string) $request['domain'],
+            isset($request['server_endpoint']) ? (string) $request['server_endpoint'] : '',
+            (string) $request['client_endpoint'],
+            (string) $request['member_id'],
+            isset($request['user_id']) ? (int) $request['user_id'] : 0,
+            (string) $request['refresh_token'],
+            (string) $request['status'],
+            (string) $request['application_token'] ?? ''
+
         );
     }
 
@@ -93,8 +97,8 @@ class Credential
         if (isset($request['access_token']) && !empty($request['access_token']))
             $this->accessToken = $request['access_token'];
 
-        if (isset($request['expires']) && (int)($request['expires']) > 0)
-            $this->expires = (int)$request['expires'];
+        if (isset($request['expires']) && (int) ($request['expires']) > 0)
+            $this->expires = (int) $request['expires'];
 
         if (isset($request['domain']) && !empty($request['domain']))
             $this->domain = $request['domain'];
@@ -108,14 +112,17 @@ class Credential
         if (isset($request['member_id']) && !empty($request['member_id']))
             $this->memberId = $request['member_id'];
 
-        if (isset($request['user_id']) && (int)($request['user_id']) > 0)
-            $this->userId = (int)$request['user_id'];
+        if (isset($request['user_id']) && (int) ($request['user_id']) > 0)
+            $this->userId = (int) $request['user_id'];
 
         if (isset($request['refresh_token']) && !empty($request['refresh_token']))
             $this->refreshToken = $request['refresh_token'];
 
         if (isset($request['status']) && !empty($request['status']))
             $this->status = $request['status'];
+
+        if (isset($request['application_token']) && !empty($request['application_token']))
+            $this->status = $request['application_token'];
     }
 
     public function toArray(): array
@@ -129,7 +136,8 @@ class Credential
             'member_id' => $this->memberId,
             'user_id' => $this->userId,
             'refresh_token' => $this->refreshToken,
-            'status' => $this->status
+            'status' => $this->status,
+            'application_token' => $this->application_token
         ];
     }
 
@@ -228,6 +236,23 @@ class Credential
     {
         $this->status = $status;
     }
+
+        /**
+     * @return string
+     */
+    public function getApplicationToken(): string
+    {
+        return $this->application_token;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setApplicationToken(string $application_token): void
+    {
+        $this->application_token = $application_token;
+    }
+
 }
 
 /* reply sample
@@ -242,5 +267,6 @@ Array
     [user_id] => 3
     [refresh_token] => e9371b62005924e600005bb400000003000003fc28b6b7f0522e64cb2b404acc04c2ba
     [status] => L
+    [appl]
 )
  */
